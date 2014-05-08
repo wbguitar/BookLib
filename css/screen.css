@@ -4,8 +4,8 @@ body {
 
 .bookContainer {
     outline: 1px solid #aaa;
-    width: 350px;
-    height: 130px;
+    width: 380px;
+    height: 140px;
     background-color: #fff;
     float: left;
     margin: 5px;
@@ -18,7 +18,7 @@ body {
     background-color: #ffe45c;
     float: left;
     margin: 5px;
-    box-shadow:         7px 7px 11px 0px rgba(50, 50, 50, 0.75);
+    box-shadow: 7px 7px 11px 0px rgba(50, 50, 50, 0.75);
 }
 
 .bookContainer img, .bookEditContainer img {
@@ -38,35 +38,36 @@ body {
 
 
 
-#addBook label {
+.bookForm label {
     width: 100px;
     margin-right: 10px;
     text-align: right;
     line-height: 25px;
 }
 
-#addBook label, #addBook input {
+.bookForm label, .bookForm input {
     display: block;
     margin-bottom: 10px;
     float: left;
 }
 
-#addBook label[for="title"], #addBook label[for="releaseDate"] {
+.bookForm label[for="title"], .bookForm label[for="releaseDate"] {
     clear: both;
 }
 
-#addBook button {
+.bookForm button {
     display: block;
     margin: 5px 20px 10px 10px;
     float: right;
     clear: both;
 }
 
-#addBook div {
+.bookForm div {
     width: 550px;
+    border: solid 1px;
 }
 
-#addBook div:after {
+.bookForm div:after {
     content: "";
     display: block;
     height: 0;
@@ -74,4 +75,10 @@ body {
     clear: both;
     font-size: 0;
     line-height: 0;
+}
+
+#books ul
+{
+    list-style: none;
+    display: inline;
 }

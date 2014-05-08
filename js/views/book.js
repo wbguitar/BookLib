@@ -5,11 +5,9 @@ app.BookView = Backbone.View.extend({
     tagName: 'div',
     className: 'bookContainer',
 
-
     editing: false,
 
     render: function() {
-        //this.el is what we defined in tagName. use $el to get access to jQuery html() function
         if (!this.editing)
         {
             var showTemplate = _.template( $( '#bookTemplate' ).html() );
@@ -26,9 +24,8 @@ app.BookView = Backbone.View.extend({
 
             var date = new Date(this.model.get('releaseDate'));
             $('#releaseDateEdit', this.el)
-                .datepicker({dateFormat: 'dd/mm/yy'})
-                .val( date.toDateString() );
-//            $('#releaseDateEdit', this.el).formatDate('yyyy-mm-dd', new Date(this.model.get('releaseDate')));
+                .val($.format.date( date, 'ddd d MMMM yyyy' ))
+                .datepicker({dateFormat: 'DD dd MM yy'});
 
             this.$el.removeClass('bookContainer');
             this.$el.addClass('bookEditContainer');

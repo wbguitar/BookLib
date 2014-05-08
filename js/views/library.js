@@ -2,6 +2,7 @@ var app = app || {};
 
 app.LibraryView = Backbone.View.extend({
     el: '#books',
+    filter: null,
 
     initialize: function( initialBooks ) {
         this.collection = new app.Library( initialBooks );
@@ -13,9 +14,39 @@ app.LibraryView = Backbone.View.extend({
 
     // render library by rendering each book in its collection
     render: function() {
+//        this.$el.remove('.bookContainer');
+//        console.log('removing ' + $('.bookContainer', this.el).length + ' items');
+//        var out = this.$el.filter('.bookContainer').remove();
+//        console.log(out);
+        $('div#container', this.$el).empty();
+
         this.collection.each(function( item ) {
-            this.renderBook( item );
+            if (this.checkFilter(item))
+                this.renderBook( item );
         }, this );
+    },
+
+    // torna true se l'item matcha il filter
+    checkFilter: function(item)
+    {
+        if (this.filter == null)
+            return true;
+
+        var ok = true;
+
+        if (this.filter.title != undefined)
+            ok = ok && (item.get('title').indexOf(this.filter.title) >= 0);
+        if (this.filter.author != undefined)
+            ok = ok && (item.get('author').indexOf(this.filter.author) >= 0);
+        if (this.filter.releaseDate != undefined)
+            ok = ok && (new Date(item.get('releaseDate')).getTime() == this.filter.releaseDate);
+
+        if (this.filter.keywords != undefined)
+            _.each(item.get('keywords'), function(i, item) {
+                ok = ok && (item.indexOf(this.filter.keywords) >= 0);
+            }, this);
+
+        return ok;
     },
 
     // render a book by creating a BookView and appending the
@@ -24,19 +55,33 @@ app.LibraryView = Backbone.View.extend({
         var bookView = new app.BookView({
             model: item
         });
-        this.$el.append( bookView.render().el );
+        $('div#container', this.$el).append( bookView.render().el );
     },
 
     events:{
-        'click #add':'addBook'
-
+        'click #add':'addBook',
+        'click #filter': 'filterBooks'
     },
 
     addBook: function( e ) {
         e.preventDefault();
 
-        var formData = {};
+        this.filter = null;
 
+        var formData = this.getFormData();
+        this.collection.create( formData );
+    },
+
+    filterBooks: function()
+    {
+        this.filter = this.getFormData();
+        console.log(this.filter);
+        this.render();
+    },
+
+    getFormData: function()
+    {
+        var formData = {};
 
         $( '#addBook div' ).children( 'input' ).each( function( i, el ) {
 
@@ -64,8 +109,8 @@ app.LibraryView = Backbone.View.extend({
         });
 
         formData['_id'] = '';
-        this.collection.create( formData );
-    }
 
+        return formData;
+    }
 
 });

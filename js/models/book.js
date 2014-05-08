@@ -12,7 +12,6 @@ app.Book = Backbone.Model.extend({
 
     parse: function( response ) {
         response.id = response._id;
-        console.log(response);
         return response;
     }
 });
