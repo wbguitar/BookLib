@@ -14,10 +14,10 @@ app.LibraryView = Backbone.View.extend({
 
     // render library by rendering each book in its collection
     render: function() {
+//        // questi due non funzionano, why?
 //        this.$el.remove('.bookContainer');
-//        console.log('removing ' + $('.bookContainer', this.el).length + ' items');
 //        var out = this.$el.filter('.bookContainer').remove();
-//        console.log(out);
+        // funziona
         $('div#container', this.$el).empty();
 
         this.collection.each(function( item ) {
@@ -41,10 +41,16 @@ app.LibraryView = Backbone.View.extend({
         if (this.filter.releaseDate != undefined)
             ok = ok && (new Date(item.get('releaseDate')).getTime() == this.filter.releaseDate);
 
-        if (this.filter.keywords != undefined)
-            _.each(item.get('keywords'), function(i, item) {
-                ok = ok && (item.indexOf(this.filter.keywords) >= 0);
+        // controllo che ogni keyword del filtro sia contenuta in almeno una keyword del libro
+        if (this.filter.keywords != undefined) {
+            _.each(this.filter.keywords, function(filterKey) {
+                var any = _.any(item.get('keywords'), function(itemKey) {
+
+                    return itemKey.keyword.indexOf(filterKey.keyword) >= 0;
+                }, this);
+                ok &= any;
             }, this);
+        }
 
         return ok;
     },
@@ -68,29 +74,24 @@ app.LibraryView = Backbone.View.extend({
 
         this.filter = null;
 
-        var formData = this.getFormData();
+        var formData = this.getFormData(true);
         this.collection.create( formData );
     },
 
     filterBooks: function()
     {
-        this.filter = this.getFormData();
-        console.log(this.filter);
+        this.filter = this.getFormData(false);
         this.render();
     },
 
-    getFormData: function()
+    getFormData: function(clearFormData)
     {
         var formData = {};
 
         $( '#addBook div' ).children( 'input' ).each( function( i, el ) {
 
-//            console.log(i);
-//            console.log(el);
             if( $( el ).val() != '' )
             {
-
-
                 if( el.id === 'keywords' ) {
                     formData[ el.id ] = [];
                     _.each( $( el ).val().split( ' ' ), function( keyword ) {
@@ -103,9 +104,9 @@ app.LibraryView = Backbone.View.extend({
                 }
             }
 
-
+            if (clearFormData)
             // Clear input field value
-            $( el ).val('');
+                $( el ).val('');
         });
 
         formData['_id'] = '';

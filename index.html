@@ -11,36 +11,38 @@
 
     <script id="bookTemplate" type="text/template" >
         <img src="<%= coverImage %>"/>
-        <ul>
-
+        <ul >
             <li><%= title %></li>
             <li><%= author %></li>
             <li><%= $.format.date( new Date( releaseDate ), 'ddd d MMMM yyyy' ) %></li>
-            <!--<li><%= releaseDate %></li>-->
-            <li><% _.each( keywords, function( keyobj ) {%> <%= keyobj.keyword %><% } ); %></li>
-            <!--<li style="visibility: collapse; z-index: 0" id="objId"><%= _id %></li>-->
-            <!--<li><%= keywords %></li>-->
+            <li ><% _.each( keywords, function( keyobj ) {%> <%= keyobj.keyword %><% } ); %></li>
+            <!--<button class="edit" objId="<%= _id %>">Edit</button>-->
+            <!--<button class="delete" objId="<%= _id %>">Delete</button>-->
+            <div style="float: right">
+                <input type="button" class="edit" value="Edit"/>
+                <input type="button" class="delete" value="Delete"/>
+            </div>
         </ul>
-        <button class="edit" objId="<%= _id %>">Edit</button>
-        <button class="delete" objId="<%= _id %>">Delete</button>
-        <!--<ul>-->
-            <!--<li><button class="edit" objId="<%= _id %>">Edit</button></li>-->
-            <!--<li><button class="delete" objId="<%= _id %>">Delete</button></li>-->
-        <!--</ul>-->
     </script>
 
     <script id="bookEditTemplate" type="text/template" >
 
-        <div >
+        <div>
             <ul>
                 <li><label for="coverImageEdit">CoverImage: </label><input id="coverImageEdit" type="file" value="<%= coverImage %>"/></li>
                 <li><label for="titleEdit">Title: </label><input id="titleEdit" type="text" value="<%= title %>"/></li>
                 <li><label for="authorEdit">Author: </label><input id="authorEdit" type="text" value="<%= author %>"/></li>
                 <li><label for="releaseDateEdit">Release date: </label><input id="releaseDateEdit" type="text" value="<%= releaseDate %>"/></li>
                 <li><label for="keywordsEdit">Keywords: </label><input id="keywordsEdit" type="text" value="<% _.each( keywords, function( keyobj ) {%> <%= keyobj.keyword %><% } ); %>"/></li>
+
+                <!--<button class="apply">Apply</button>-->
+                <!--<button class="cancel">Cancel</button>-->
+
+                <div style="float: right">
+                    <input type="button" class="apply" value="Apply"/>
+                    <input type="button" class="cancel" value="Cancel"/>
+                </div>
             </ul>
-            <button class="apply">Apply</button>
-            <button class="cancel">Cancel</button>
         </div>
     </script>
 
@@ -66,14 +68,13 @@
                 <label for="releaseDate">Release date: </label><input id="releaseDate" type="text" />
                 <label for="keywords">Keywords: </label><input id="keywords" type="text" />
 
-                <button id="add">Add</button>
-                <button id="filter">Filter</button>
+                <input type="button" id="add" value="Add"/>
+                <input type="button" id="filter" value="Filter"/>
             </div>
         </form>
-        <div id="container"></div>
-
-
-
+        <div id="container">
+            <!-- contiene tutte le BookView -->
+        </div>
     </div>
 
 
