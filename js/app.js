@@ -9,7 +9,7 @@ $(function() {
 //        { title: 'Eloquent JavaScript', author: 'Marijn Haverbeke', releaseDate: '2011', keywords: 'JavaScript Programming' }
 //    ];
 
-    $( '#releaseDate' ).datepicker({dateFormat: 'DD dd MM yy'});
-
-    new app.LibraryView(  );
+    $('#releaseDate').datepicker({dateFormat: 'DD dd MM yy'});
+    $('#errorDialog').dialog({autoOpen: false, resizable: false});
+    new app.LibraryView();
 });

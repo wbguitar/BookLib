@@ -29,26 +29,26 @@ app.LibraryView = Backbone.View.extend({
     // torna true se l'item matcha il filter
     checkFilter: function(item)
     {
-        if (this.filter == null)
+        if (this.filter === null)
             return true;
 
         var ok = true;
 
-        if (this.filter.title != undefined)
+        if (this.filter.title != '')
             ok = ok && (item.get('title').indexOf(this.filter.title) >= 0);
-        if (this.filter.author != undefined)
+        if (this.filter.author != '')
             ok = ok && (item.get('author').indexOf(this.filter.author) >= 0);
-        if (this.filter.releaseDate != undefined)
+        if (this.filter.releaseDate != '')
             ok = ok && (new Date(item.get('releaseDate')).getTime() == this.filter.releaseDate);
 
         // controllo che ogni keyword del filtro sia contenuta in almeno una keyword del libro
-        if (this.filter.keywords != undefined) {
+        if (this.filter.keywords != '') {
             _.each(this.filter.keywords, function(filterKey) {
                 var any = _.any(item.get('keywords'), function(itemKey) {
 
                     return itemKey.keyword.indexOf(filterKey.keyword) >= 0;
                 }, this);
-                ok &= any;
+                ok = ok && any;
             }, this);
         }
 
@@ -75,7 +75,17 @@ app.LibraryView = Backbone.View.extend({
         this.filter = null;
 
         var formData = this.getFormData(true);
-        this.collection.create( formData );
+        var book = new app.Book(formData);
+        book.on('invalid', function(model, errors) {
+            $('#errorDialog ul').empty();
+            console.log(this.validationError);
+            _.each(errors, function(error) {
+                $('#errorDialog ul').append('<li>' + error + '</li>');
+            });
+            $('#errorDialog').dialog('open');
+        });
+        if (book.isValid())
+            this.collection.create( formData );
     },
 
     filterBooks: function()
@@ -90,14 +100,14 @@ app.LibraryView = Backbone.View.extend({
 
         $( '#addBook div' ).children( 'input' ).each( function( i, el ) {
 
-            if( $( el ).val() != '' )
+//            if( $( el ).val() != '' )
             {
                 if( el.id === 'keywords' ) {
                     formData[ el.id ] = [];
                     _.each( $( el ).val().split( ' ' ), function( keyword ) {
                         formData[ el.id ].push({ 'keyword': keyword });
                     });
-                } else if( el.id === 'releaseDate' ) {
+                } else if( el.id === 'releaseDate' && $( '#releaseDate' ).datepicker( 'getDate' ) != null) {
                     formData[ el.id ] = $( '#releaseDate' ).datepicker( 'getDate' ).getTime();
                 } else {
                     formData[ el.id ] = $( el ).val();

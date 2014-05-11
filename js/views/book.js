@@ -7,6 +7,19 @@ app.BookView = Backbone.View.extend({
 
     editing: false,
 
+    initialize: function()
+    {
+        this.model.on('invalid', function(model, errors) {
+            $('#errorDialog ul').empty();
+            console.log(this.validationError);
+            _.each(errors, function(error) {
+                $('#errorDialog ul').append('<li>' + error + '</li>');
+
+            });
+            $('#errorDialog').dialog('open');
+        });
+    },
+
     render: function() {
         if (!this.editing)
         {
@@ -30,7 +43,6 @@ app.BookView = Backbone.View.extend({
             this.$el.removeClass('bookContainer');
             this.$el.addClass('bookEditContainer');
         }
-
 
         return this;
     },

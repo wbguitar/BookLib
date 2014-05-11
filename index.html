@@ -68,15 +68,22 @@
                 <label for="releaseDate">Release date: </label><input id="releaseDate" type="text" />
                 <label for="keywords">Keywords: </label><input id="keywords" type="text" />
 
-                <input type="button" id="add" value="Add"/>
-                <input type="button" id="filter" value="Filter"/>
+                <span>
+                    <input type="button" id="add" value="Add"/>
+                    <input type="button" id="filter" value="Filter"/>
+                </span>
             </div>
+
         </form>
         <div id="container">
             <!-- contiene tutte le BookView -->
         </div>
     </div>
 
+    <div id="errorDialog" title="Validation error">
+        <ul>
 
+        </ul>
+    </div>
 </body>
 </html>
